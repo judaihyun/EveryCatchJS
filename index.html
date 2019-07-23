@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!--
+<script src="uPrivacy.js" crossorigin="anonymous"></script>
+-->
+<script src='errorDetector.js'></script>
+</head>
+
+<body>
+
+		
+		<div class="Boardlistcontent">
+			<div class="mycontentbody table-responsive form form-inline">
+				<form name="writeForm" id="writeForm" onsubmit="return false;" >
+				<input type="hidden" id="boardId" name="boardId" value=""/>
+				<input type="hidden" name="menuId" id="menuId" value="${requestMap.menuId}"/>
+				<input type="hidden" name="boardTypeId" id="boardTypeId" value="${requestMap.boardTypeId}"/>
+				<input type="hidden" value="board/${requestMap.boardTypeId}" id="filepath" name="filepath" />
+				<input type="hidden" id="sAction" name="sAction" value=""/>
+				<input type="hidden" id="mode" name="mode" value=""/>		
+				<input type="hidden" id="boardDesc" name="boardDesc" value=""/>
+				<input type="hidden" id="boardTitle" name="boardTitle" value=""/>
+				<input type='file' class='fileForm' name='replyFile_0'/>
+				<input type='file' class='fileForm' name='replyFile_1'/>
+				<input type='file' class='fileForm' name='replyFile_2'/>
+				<table class="table">
+					<caption class="sr-only2">
+					</caption>
+					<colgroup>
+						<col class="infoCol1">
+						<col>
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row" class="infolabel"><span class="musthave">*</span>제목</th>
+							<td class="no-v-padding">
+								<div class="multiline-input-group" style="color: blue;">
+									<label for="boardTitleView" class="sr-only">제목</label>
+									<input class="form-control" type="text" id="boardTitleView" name="boardTitleView">
+								</div>
+		
+							</td>
+						</tr>
+						<tr>
+							<th scope="row" class="infolabel"><span class="musthave">*</span>작성자</th>
+							<td class="no-v-padding">
+								<div class="multiline-input-group">
+									<label for="boardMemberName" class="sr-only">작성자</label>
+									<input class="form-control" type="text" name="boardMemberName" id="boardMemberName" value="${userSession.mmName}" readonly="readonly">
+								</div>
+		
+							</td>
+						</tr>
+						<tr>
+							<th scope="row" class="infolabel"><span class="musthave">*</span>내용</th>
+							<td class="no-v-padding">
+								<div class="multiline-input-group" style="color: blue;">
+									<label for="boardDescView" class="sr-only">내용</label>
+									<textarea id="boardDescView" name="boardDescView" class="reqvalue" title="내용" style="width:100%; height:300px" class="content"></textarea>
+								</div>
+							</td>
+						</tr>				
+					</tbody>
+				</table>
+				</form>
+				
+			</div>
+			<div class="buttonlayer">
+				<button id="wf_click" class="btn btn-md btn-primary" onclick="uPrivSubmit()">확인</button>
+				<button class="btn btn-md btn-cancel" onclick="goList();">취소</button>
+			</div>
+		</div>
+		<script type="text/javascript">
+		
+		
+		
+			function onReplySubmit(){
+				var fileEl = document.getElementsByName('replyFile');
+					if (confirm("저장 하시겠습니까??")) {
+						if($("#boardTitleView").val() == ""){
+							alert("제목을 입력해주세요.");
+							$("#boardTitleView").focus();
+							return;
+						}
+						if($("#boardDescView").val() == ""){
+							alert("내용을 입력해주세요.");
+							$("#boardDescView").focus();
+							return;
+						}
+		
+						$("#writeForm").submit();
+				}
+			}
+		
+			
+/*
+
+		window.onerror = function (msg, url, lineNo, columnNo, error) {
+  			var string = msg.toLowerCase();
+  			var substring = "script error";
+  			if (string.indexOf(substring) > -1){
+    			alert('Script Error: See Browser Console for Detail');
+  			} else {
+    			var message = {
+      				Message :  msg,
+      				URL: url,
+      				Line: lineNo,
+      				Column: columnNo,
+      				Error : JSON.stringify(error)
+    			};
+
+    			alert(message);
+  			}
+
+  			return false;
+		};
+*/
+		
+
+
+var sendForm = document.getElementsByName('writeForm');
+var uPrivSubmit = uPrivacy(sendForm[0], onReplySubmit, false);
+
+</script>
+
+</body>
+
+</html>
