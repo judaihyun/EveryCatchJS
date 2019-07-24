@@ -11,10 +11,11 @@ ErrorDetector = (function () {
           https://developer.mozilla.org/ko/docs/Web/Events
           https://www.w3schools.com/jsref/dom_obj_event.asp
           */
-         eventObj : ['abort','load','error', // resource event
+         eventObj : [
+                    'abort','load',/*'error'*/
                     'online','offline',  // Note: The ononline and onoffline events are only supported in Firefox and Internet Explorer version 8 to 10.
                     'contextmenu', // mouse event
-                    'focus','blur',  // focus event
+                   // 'focus','blur',  // focus event
                     'open','message','error','close',  // webSocket event
                     'reset','submit',   // form event
                     'fullscrennchange','fullscreenerror','resize','scroll',  // view event
@@ -25,10 +26,16 @@ ErrorDetector = (function () {
                     'click','dblclick', 'contextmenu','select',  // mouse event
                     'pointerlockchange','pointerlockerror',  // mouse event
                     //'dragstart','drag','dragend','dragenter','dragover','dragleave','drop',  // drag event
-               ]
+               ],
+          resource : ['abort','load','error'],  // resource event]
+          mouse : ['mouseenter','mouseover','mousemove','mouseleave','mouseout',  // mouse event
+                   'mousedown','mouseup','auxclick','click','dbclick','contextmenu','select',
+                   'pointerlocakchange','pointerlockerror']
+
+
      }
 
-     function pushError(what, where, line)
+     function _pushError(what, where, line)
 	{
 		let errorObj = {
 			'who' : getClientInfo(),
@@ -40,7 +47,7 @@ ErrorDetector = (function () {
 		console.log(errorObj);
 	}
 
-	function pushErrorAjax(what, where)
+	function _pushErrorAjax(what, where)
 	{
 		let errorObj = {
 			'who' : getClientInfo(),
@@ -89,25 +96,46 @@ ErrorDetector = (function () {
          return dateTime;
      }
 
-     function eventTrack(element) {
+     function _eventTracking(topElement) {
           let events = [];
           let log = function(e) { 
                console.log(e);
           };
-  
+
+          console.log('-------to attach event---------');
           defautOpt.eventObj.forEach(i =>{
+               console.log(i);
                events.push(i);
           });
-          events.forEach(function(eventName) {
-               console.log(eventName);
-               element.addEventListener(eventName, (e)=>console.log(e));
+          console.log('-------------------------------');
+
+          events.forEach(function(evt) {
+               if(defautOpt.resource.includes(evt))
+               {
+                    topElement.addEventListener(evt, resourceHandler);
+               }else if(defautOpt.mouse.includes(evt))
+               {
+                    topElement.addEventListener(evt, mouseHandler);
+               }
           });
      }
 
+     function mouseHandler(e)
+     {
+          console.warn('mouseHandler');
+          console.log(e.target);
+     }
+
+     function resourceHandler(e)
+     {
+          console.warn('resourceHandler');
+          console.log(e.target);
+     }
+
 	return {
-		pushError : pushError,
-          pushErrorAjax : pushErrorAjax,
-          eventTracking : eventTrack 
+		pushError : _pushError,
+          pushErrorAjax : _pushErrorAjax,
+          eventTracking : _eventTracking
 	}
 
 })();
@@ -115,18 +143,11 @@ ErrorDetector = (function () {
 ErrorDetector.eventTracking(window);
 
 
+
+
 window.onerror = function (what, where, line, error){
 	// script error. -> https://sentry.io/answers/javascript-script-error/
-    
-     let getStackTrace = function() {
-          let obj = {};
-          Error.captureStackTrace(obj, getStackTrace);
-          return obj.stack;
-     };
-  
-          //console.log(getStackTrace());
-     //     this.console.trace();
-          ErrorDetector.pushError(what, where, line);
+     ErrorDetector.pushError(what, where, line);
 };
 
 
