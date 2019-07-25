@@ -35,6 +35,45 @@ ErrorDetector = (function () {
 
      }
 
+  
+     let handler = _userEvent();
+
+     function mouseHandler(e)
+     {
+          console.warn('mouseHandler');
+          console.log(e.target);
+          handler.setEvent(e.target);
+     }
+
+     function resourceHandler(e)
+     {
+          console.warn('resourceHandler');
+          console.log(e.target);
+     }
+
+     function _userEvent(eventData)
+     {
+          let data = [];
+ 
+
+
+          return {
+               setEvent : function(event)
+               {
+                    //userEvent.eventArray.push(event);
+                    let eventArray = {
+                         'who' : getClientInfo(),
+                         'when' : getDateTime(),
+                         'where' : location.href,
+                         events : ''
+                    };
+                    eventArray.events = event;
+                    data.push(eventArray);
+               },
+               getEvent : function(){return data;}
+          }
+     }
+
      function _pushError(what, where, line)
 	{
 		let errorObj = {
@@ -43,7 +82,7 @@ ErrorDetector = (function () {
 			'where' : where || location.href,
 			'what' : what || '',
 			'line' : line || ''
-		}
+          }
 		console.log(errorObj);
 	}
 
@@ -120,28 +159,29 @@ ErrorDetector = (function () {
           });
      }
 
-     function mouseHandler(e)
-     {
-          console.warn('mouseHandler');
-          console.log(e.target);
-     }
-
-     function resourceHandler(e)
-     {
-          console.warn('resourceHandler');
-          console.log(e.target);
-     }
+   
 
 	return {
 		pushError : _pushError,
           pushErrorAjax : _pushErrorAjax,
-          eventTracking : _eventTracking
+          eventTracking : _eventTracking,
+          pushUserEvent : _userEvent,
+          getEvent : handler.getEvent
 	}
 
 })();
 
-ErrorDetector.eventTracking(window);
+let detector = ErrorDetector;
 
+detector.eventTracking(window);
+
+document.addEventListener('DOMContentLoaded', function(){
+
+     document.getElementById('showEvent').addEventListener('click', function(){
+          console.log(detector.getEvent());
+     },false);
+
+},false);
 
 
 
