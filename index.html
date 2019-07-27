@@ -4,10 +4,11 @@
 	<meta charset="UTF-8">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+<script src="uPrivacy.js"></script>
+<script src='errorCatch.js'></script>
 <!--
-<script src="uPrivacy.js" crossorigin="anonymous"></script>
+	<script src='eventCatch.js'></script>
 -->
-<script src='errorDetector.js'></script>
 </head>
 
 <body>
@@ -96,35 +97,10 @@
 						$("#writeFor").submit();
 				}
 			}
-		
-			
-/*
-
-		window.onerror = function (msg, url, lineNo, columnNo, error) {
-  			var string = msg.toLowerCase();
-  			var substring = "script error";
-  			if (string.indexOf(substring) > -1){
-    			alert('Script Error: See Browser Console for Detail');
-  			} else {
-    			var message = {
-      				Message :  msg,
-      				URL: url,
-      				Line: lineNo,
-      				Column: columnNo,
-      				Error : JSON.stringify(error)
-    			};
-
-    			alert(message);
-  			}
-
-  			return false;
-		};
-*/
-		
 
 
 var sendForm = document.getElementsByName('writeForm');
-//var uPrivSubmit = uPrivacy(sendForm[0], onReplySubmit, false);
+var uPrivSubmit = uPrivacy(sendForm[0], onReplySubmit, false);
 
 </script>
 
