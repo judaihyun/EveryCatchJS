@@ -54,6 +54,7 @@ CatchError.prototype.pushError = function(what, where, line)
           'line': line || ''
      }
      console.log(errorObj);
+     console.log(JSON.stringify(errorObj));
 }
 
 CatchError.prototype.pushErrorAjax = function (what, where) 
@@ -66,6 +67,7 @@ CatchError.prototype.pushErrorAjax = function (what, where)
           'type': 'ajax'
      }
      console.log(errorObj);
+     console.log(JSON.stringify(errorObj));
 }
 
 
