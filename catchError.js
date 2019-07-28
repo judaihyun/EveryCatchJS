@@ -71,12 +71,13 @@ CatchError.prototype.pushErrorAjax = function (what, where)
 }
 
 
-let detect = new CatchError();
+
+let catchError = new CatchError();
 
 
 window.onerror = function (what, where, line, error) {
      // script error. -> https://sentry.io/answers/javascript-script-error/
-     detect.pushError(what, where, line);
+     catchError.pushError(what, where, line);
 };
 
 
