@@ -46,39 +46,47 @@ CatchError.prototype.helper = {
 
 CatchError.prototype.imgError = function(what)
 {
-     let whatMsg, lineMsg;
-
+     let retObj = {
+          whatMsg : '',
+          lineMsg : ''
+     };
+    console.log(what); 
      if(what instanceof ErrorEvent)
      {
-          console.log(what);
+          retObj.whatMsg = what.message;
+          retObj.lineMsg = what.lineno;
      }else if(what instanceof Event){
-          return what.target.outerHTML;
-          console.log(what.target);
+          retObj.whatMsg = what.type || '';
+          retObj.lineMsg = what.target.outerHTML || '';
      }
 
-     return what;
+     return retObj;
 }
 
-CatchError.prototype.pushError = function(what, where, line)
+CatchError.prototype.pushError = function(message)
 {
+     //console.log(message);
+     if(!message) return;
+     let errorMsg = this.imgError(message);
      let errorObj = {
           'who': this.helper.getClientInfo(),
           'when': this.helper.getDateTime(),
-          'where': where || location.href,
-          'what': this.imgError(what) || '',
-          'line': line || ''
+          'location': location.href,
+          'message': errorMsg.whatMsg || errorMsg.lineMsg || '',
+          'line': errorMsg.lineMsg || ''
      }
-     //console.log(errorObj);
+     console.log(errorObj);
      //console.log(JSON.stringify(errorObj));
+     return errorObj;
 }
 
-CatchError.prototype.pushErrorAjax = function (what, where) 
+CatchError.prototype.pushErrorAjax = function (message, where) 
 {
      let errorObj = {
           'who': this.helper.getClientInfo(),
           'when': this.helper.getDateTime(),
-          'where': where || location.href,
-          'what': what,
+          'location': where || location.href,
+          'message': message,
           'type': 'ajax'
      }
      console.log(errorObj);
@@ -90,22 +98,20 @@ CatchError.prototype.pushErrorAjax = function (what, where)
 let catchError = new CatchError();
 
 
+/*
+
 window.onerror = function (what, where, line, error) {
-     // script error. -> https://sentry.io/answers/javascript-script-error/
 //     catchError.pushError(what, where, line);
 };
 
-window.addEventListener('error', function(what, where, line, error){
-     catchError.pushError(what, where, line);
-},false);
-
-let imgEl = document.getElementsByTagName('img');
-/*
-imgEl.forEach(function(i){
-     console.log(i.onerror);
-})
 */
 
+
+
+window.addEventListener('error', function(error){
+     // script error. -> https://sentry.io/answers/javascript-script-error/
+     catchError.pushError(error);
+},true);
 
 
 
