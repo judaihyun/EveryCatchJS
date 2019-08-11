@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="UTF-8">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
-<script src="uPrivacy.js"></script>
-<script src='catchError.js'></script>
-<!--
+	<script src="uPrivacy.js"></script>
+	<script src='catchError.js'></script>
+	<!--
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 	<script src='catchEvent.js'></script>
 -->
 </head>
 
 <body>
+	<img src='localhosts//test.jpg' />
 
-		
-		<div class="Boardlistcontent">
-			<div class="mycontentbody table-responsive form form-inline">
-				<form name="writeForm" id="writeForm" onsubmit="return false;" >
-				<input type="hidden" id="boardId" name="boardId" value=""/>
-				<input type="hidden" name="menuId" id="menuId" value="${requestMap.menuId}"/>
-				<input type="hidden" name="boardTypeId" id="boardTypeId" value="${requestMap.boardTypeId}"/>
+	<div class="Boardlistcontent">
+		<div class="mycontentbody table-responsive form form-inline">
+			<form name="writeForm" id="writeForm" onsubmit="return false;" action="test">
+				<input type="hidden" id="boardId" name="boardId" value="" />
+				<input type="hidden" name="menuId" id="menuId" value="${requestMap.menuId}" />
+				<input type="hidden" name="boardTypeId" id="boardTypeId" value="${requestMap.boardTypeId}" />
 				<input type="hidden" value="board/${requestMap.boardTypeId}" id="filepath" name="filepath" />
-				<input type="hidden" id="sAction" name="sAction" value=""/>
-				<input type="hidden" id="mode" name="mode" value=""/>		
-				<input type="hidden" id="boardDesc" name="boardDesc" value=""/>
-				<input type="hidden" id="boardTitle" name="boardTitle" value=""/>
-				<input type='file' class='fileForm' name='replyFile_0'/>
-				<input type='file' class='fileForm' name='replyFile_1'/>
-				<input type='file' class='fileForm' name='replyFile_2'/>
+				<input type="hidden" id="sAction" name="sAction" value="" />
+				<input type="hidden" id="boardText5" name="boardText5" value="" />
+				<input type="hidden" id="mode" name="mode" value="" />
+				<input type="hidden" id="boardDesc" name="boardDesc" value="" />
+				<input type='file' class='fileForm' name='replyFile_0' />
+				<input type='file' class='fileForm' name='replyFile_1' />
+				<input type='file' class='fileForm' name='replyFile_2' />
 				<table class="table">
 					<caption class="sr-only2">
 					</caption>
@@ -44,7 +45,7 @@
 									<label for="boardTitleView" class="sr-only">제목</label>
 									<input class="form-control" type="text" id="boardTitleView" name="boardTitleView">
 								</div>
-		
+
 							</td>
 						</tr>
 						<tr>
@@ -52,9 +53,10 @@
 							<td class="no-v-padding">
 								<div class="multiline-input-group">
 									<label for="boardMemberName" class="sr-only">작성자</label>
-									<input class="form-control" type="text" name="boardMemberName" id="boardMemberName" value="${userSession.mmName}" readonly="readonly">
+									<input class="form-control" type="text" name="boardMemberName" id="boardMemberName"
+										value="${userSession.mmName}" readonly="readonly">
 								</div>
-		
+
 							</td>
 						</tr>
 						<tr>
@@ -62,48 +64,93 @@
 							<td class="no-v-padding">
 								<div class="multiline-input-group" style="color: blue;">
 									<label for="boardDescView" class="sr-only">내용</label>
-									<textarea id="boardDescView" name="boardDescView" class="reqvalue" title="내용" style="width:100%; height:300px" class="content"></textarea>
+									<textarea id="boardDescView" name="boardDescView" class="reqvalue" title="내용"
+										style="width:100%; height:300px" class="content"></textarea>
 								</div>
 							</td>
-						</tr>				
+						</tr>
+						<tr>
+							<td>
+								<select name="boardText5Select"onchange="ChngCmmtt();return false;" class="reqvalue" title="상임위원회">
+									<option value=''>선택하세요</option>
+									<option value="02010000">서울특별시의회</option>
+									<option value="02020000">운영위원회</option>
+									<option value="02030000">행정자치위원회</option>
+									<option value="02380000">기획경제위원회</option>
+									<option value="02050000">환경수자원위원회</option>
+									<option value="02B30000">문화체육관광위원회</option>
+									<option value="02880000">보건복지위원회</option>
+									<option value="02E60000">도시안전건설위원회</option>
+									<option value="02C60000">도시계획관리위원회</option>
+									<option value="02100000">교통위원회</option>
+									<option value="02A60000">교육위원회</option>
+									<option value="02110000">예산결산특별위원회</option>
+								</select>
+							</td>
+							<td>
+								<input type="checkbox" value="02020000" name="boardText5" id="check_id_boardText5_02020000"><label for="check_id_boardText5_02020000">운영위원회&nbsp;</label><input type="checkbox" value="02030000" name="boardText5" id="check_id_boardText5_02030000"><label for="check_id_boardText5_02030000">행정자치위원회&nbsp;</label><input type="checkbox" value="02380000" name="boardText5" id="check_id_boardText5_02380000"><label for="check_id_boardText5_02380000">기획경제위원회&nbsp;</label><input type="checkbox" value="02050000" name="boardText5" id="check_id_boardText5_02050000"><label for="check_id_boardText5_02050000">환경수자원위원회&nbsp;</label><input type="checkbox" value="02B30000" name="boardText5" id="check_id_boardText5_02B30000"><label for="check_id_boardText5_02B30000">문화체육관광위원회&nbsp;</label><br /><input type="checkbox" value="02880000" name="boardText5" id="check_id_boardText5_02880000"><label for="check_id_boardText5_02880000">보건복지위원회&nbsp;</label><input type="checkbox" value="02E60000" name="boardText5" id="check_id_boardText5_02E60000"><label for="check_id_boardText5_02E60000">도시안전건설위원회&nbsp;</label><input type="checkbox" value="02C60000" name="boardText5" id="check_id_boardText5_02C60000"><label for="check_id_boardText5_02C60000">도시계획관리위원회&nbsp;</label><input type="checkbox" value="02100000" name="boardText5" id="check_id_boardText5_02100000"><label for="check_id_boardText5_02100000">교통위원회&nbsp;</label><br /><input type="checkbox" value="02A60000" name="boardText5" id="check_id_boardText5_02A60000"><label for="check_id_boardText5_02A60000">교육위원회&nbsp;</label><input type="checkbox" value="02110000" name="boardText5" id="check_id_boardText5_02110000"><label for="check_id_boardText5_02110000">예산결산특별위원회&nbsp;</label><input type="checkbox" value="02530000" name="boardText5" id="check_id_boardText5_02530000"><label for="check_id_boardText5_02530000">정책위원회&nbsp;</label><input type="checkbox" value="02I10000" name="boardText5" id="check_id_boardText5_02I10000"><label for="check_id_boardText5_02I10000">서울특별시농수산식품공사 사장 후보자 인사청문특별위원회&nbsp;</label><br /><input type="checkbox" value="02I20000" name="boardText5" id="check_id_boardText5_02I20000"><label for="check_id_boardText5_02I20000">윤리특별위원회&nbsp;</label><input type="checkbox" value="02I20000" name="boardText5" id="check_id_boardText5_02I20000"><label for="check_id_boardText5_02I20000">윤리특별위원회&nbsp;</label><input type="checkbox" value="02I30000" name="boardText5" id="check_id_boardText5_02I30000"><label for="check_id_boardText5_02I30000">청년 특별위원회&nbsp;</label><input type="checkbox" value="02I30000" name="boardText5" id="check_id_boardText5_02I30000"><label for="check_id_boardText5_02I30000">청년 특별위원회&nbsp;</label><br /><input type="checkbox" value="02I40000" name="boardText5" id="check_id_boardText5_02I40000"><label for="check_id_boardText5_02I40000">서부지역 광역철도 건설 특별위원회&nbsp;</label><input type="checkbox" value="02I50000" name="boardText5" id="check_id_boardText5_02I50000"><label for="check_id_boardText5_02I50000">항공기 소음 특별위원회&nbsp;</label><input type="checkbox" value="02I60000" name="boardText5" id="check_id_boardText5_02I60000"><label for="check_id_boardText5_02I60000">윤리특별위원회&nbsp;</label><input type="checkbox" value="02I70000" name="boardText5" id="check_id_boardText5_02I70000"><label for="check_id_boardText5_02I70000">예산정책연구위원회&nbsp;</label><br /><input type="checkbox" value="02I80000" name="boardText5" id="check_id_boardText5_02I80000"><label for="check_id_boardText5_02I80000">서울특별시의회 체육단체 비위근절을 위한 행정사무조사 특별위원회&nbsp;</label><input type="checkbox" value="02J00000" name="boardText5" id="check_id_boardText5_02J00000"><label for="check_id_boardText5_02J00000">서울특별시의회 서울시설공단 이사장후보자 인사청문 특별위원회&nbsp;</label>
+							</td>
+						</tr>
 					</tbody>
 				</table>
-				</form>
-				
-			</div>
-			<div class="buttonlayer">
-				<button id="wf_click" class="btn btn-md btn-primary" onclick="uPrivSubmit()">확인</button>
-				<button class="btn btn-md btn-cancel" onclick="goList();">취소</button>
-			</div>
-			<button id='showEvent'>showEvent</button>
+			</form>
+
 		</div>
-		<script type="text/javascript">
-	
-		
-		
-			function onReplySubmit(){
-				var fileEl = document.getElementsByName('replyFile');
-					if (confirm("저장 하시겠습니까??")) {
-						if($("#boardTitleView").val() == ""){
-							alert("제목을 입력해주세요.");
-							$("#boardTitleView").focus();
-							return;
-						}
-						if($("#boardDescView").val() == ""){
-							alert("내용을 입력해주세요.");
-							$("#boardDescView").focus();
-							return;
-						}
-		
-						$("#writeFor").submit();
+		<div class="buttonlayer">
+			<button id="wf_click" class="btn btn-md btn-primary" onclick="uPrivSubmit()">확인</button>
+			<button class="btn btn-md btn-cancel" onclick="goList();">취소</button>
+		</div>
+		<button id='showEvent'>showEvent</button>
+	</div>
+	<script type="text/javascript">
+
+		function ChngCmmtt() {
+
+			var boardText5sel = ChngSelValue();
+
+			var vData = "";
+
+			console.log('5sel : ' + boardText5sel);
+		}
+
+
+		//2013.05.22 상임위 코드 변경시 변경코드값 세팅
+		function ChngSelValue() {
+
+			var boardText5sel = document.all.boardText5Select.value;
+			document.all.boardText5.value = boardText5sel;
+
+			return boardText5sel;
+
+		}
+
+		function onReplySubmit() {
+
+			var after = document.getElementById('writeForm');
+			console.log(after);
+			var fileEl = document.getElementsByName('replyFile');
+			if (confirm("저장 하시겠습니까??")) {
+				if ($("#boardTitleView").val() == "") {
+					alert("제목을 입력해주세요.");
+					$("#boardTitleView").focus();
+					return;
 				}
+				if ($("#boardDescView").val() == "") {
+					alert("내용을 입력해주세요.");
+					$("#boardDescView").focus();
+					return;
+				}
+
+				$("#writeFor").submit();
 			}
+		}
 
 
-var sendForm = document.getElementsByName('writeForm');
-var uPrivSubmit = uPrivacy(sendForm[0], onReplySubmit, false);
+		var sendForm = document.getElementsByName('writeForm');
+		var uPrivSubmit = Privacy(sendForm[0], onReplySubmit, false, ['boardTitleView', 'boardText5',
+			'boardText5Select']);
 
-</script>
+	</script>
 
 </body>
 

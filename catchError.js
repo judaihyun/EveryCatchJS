@@ -44,17 +44,32 @@ CatchError.prototype.helper = {
 }
 
 
+CatchError.prototype.imgError = function(what)
+{
+     let whatMsg, lineMsg;
+
+     if(what instanceof ErrorEvent)
+     {
+          console.log(what);
+     }else if(what instanceof Event){
+          return what.target.outerHTML;
+          console.log(what.target);
+     }
+
+     return what;
+}
+
 CatchError.prototype.pushError = function(what, where, line)
 {
      let errorObj = {
           'who': this.helper.getClientInfo(),
           'when': this.helper.getDateTime(),
           'where': where || location.href,
-          'what': what || '',
+          'what': this.imgError(what) || '',
           'line': line || ''
      }
-     console.log(errorObj);
-     console.log(JSON.stringify(errorObj));
+     //console.log(errorObj);
+     //console.log(JSON.stringify(errorObj));
 }
 
 CatchError.prototype.pushErrorAjax = function (what, where) 
@@ -77,8 +92,19 @@ let catchError = new CatchError();
 
 window.onerror = function (what, where, line, error) {
      // script error. -> https://sentry.io/answers/javascript-script-error/
-     catchError.pushError(what, where, line);
+//     catchError.pushError(what, where, line);
 };
+
+window.addEventListener('error', function(what, where, line, error){
+     catchError.pushError(what, where, line);
+},false);
+
+let imgEl = document.getElementsByTagName('img');
+/*
+imgEl.forEach(function(i){
+     console.log(i.onerror);
+})
+*/
 
 
 
