@@ -1,9 +1,5 @@
 
-
-
-
-let CatchError = function(){};
-
+var CatchError = CatchError || function(){};
 
 CatchError.prototype.helper = {
     
@@ -11,7 +7,7 @@ CatchError.prototype.helper = {
           let clientInfo =
           {
                browser: navigator.userAgent,
-               session: ''
+               user_session: ''
           }
           return clientInfo;
      },
@@ -44,22 +40,19 @@ CatchError.prototype.helper = {
 }
 
 
-CatchError.prototype.imgError = function(what)
+CatchError.prototype.selectMsg = function(what)
 {
-     let retObj = {
-          whatMsg : '',
-          lineMsg : ''
-     };
-    console.log(what); 
+     let retObj = {};
+     //console.log(what); 
      if(what instanceof ErrorEvent)
      {
-          retObj.whatMsg = what.message;
-          retObj.lineMsg = what.lineno;
+          retObj.whatMsg = what.message || '';
+          retObj.lineMsg = what.lineno || '';
      }else if(what instanceof Event){
           retObj.whatMsg = what.type || '';
           retObj.lineMsg = what.target.outerHTML || '';
      }
-
+     //console.log(retObj);
      return retObj;
 }
 
@@ -67,35 +60,58 @@ CatchError.prototype.pushError = function(message)
 {
      //console.log(message);
      if(!message) return;
-     let errorMsg = this.imgError(message);
+     let errorMsg = this.selectMsg(message);
      let errorObj = {
-          'who': this.helper.getClientInfo(),
-          'when': this.helper.getDateTime(),
-          'location': location.href,
+          'clientInfo': this.helper.getClientInfo(),
+          'logged_date': this.helper.getDateTime(),
+          'location': location.pathname,
           'message': errorMsg.whatMsg || errorMsg.lineMsg || '',
           'line': errorMsg.lineMsg || ''
      }
      console.log(errorObj);
      //console.log(JSON.stringify(errorObj));
+     let logUrl = 'http://localhost:8080/log';
+
+     postRequest(logUrl, errorObj);
      return errorObj;
 }
 
-CatchError.prototype.pushErrorAjax = function (message, where) 
+CatchError.prototype.pushErrorAjax = function (message, loc) 
 {
      let errorObj = {
-          'who': this.helper.getClientInfo(),
-          'when': this.helper.getDateTime(),
-          'location': where || location.href,
-          'message': message,
+          'clientInfo': this.helper.getClientInfo(),
+          'logged_date': this.helper.getDateTime(),
+          'location': location.pathname,
+          'message': message.statusText || 'NULL',
           'type': 'ajax'
      }
      console.log(errorObj);
-     console.log(JSON.stringify(errorObj));
+     
+     let ajaxLogUrl = 'http://localhost:8080/ajaxError';
+     postRequest(ajaxLogUrl, errorObj);
+   
+     return errorObj;
+     
+    // console.log(JSON.stringify(errorObj));
+}
+
+function postRequest(url, data)
+{
+	$.ajax({
+		type: "post",
+		url: url,
+		data: JSON.stringify(data),
+		contentType: 'application/json',
+		error: function (jqXHR) {
+			console.log(jqXHR);
+		}
+	});
+
 }
 
 
 
-let catchError = new CatchError();
+var Catcher = Catcher || new CatchError();
 
 
 /*
@@ -110,7 +126,7 @@ window.onerror = function (what, where, line, error) {
 
 window.addEventListener('error', function(error){
      // script error. -> https://sentry.io/answers/javascript-script-error/
-     catchError.pushError(error);
+     Catcher.pushError(error);
 },true);
 
 
