@@ -34,7 +34,7 @@ CatchError.prototype.helper = {
           if (second.toString().length == 1) {
                second = '0' + second;
           }
-          let dateTime = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
+          let dateTime = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
           return dateTime;
      }
 }
@@ -49,8 +49,8 @@ CatchError.prototype.selectMsg = function(what)
           retObj.whatMsg = what.message || '';
           retObj.lineMsg = what.lineno || '';
      }else if(what instanceof Event){
-          retObj.whatMsg = what.type || '';
-          retObj.lineMsg = what.target.outerHTML || '';
+          retObj.whatMsg = what.target.outerHTML || '';
+          retObj.lineMsg = what.lineno || 'null';
      }
      //console.log(retObj);
      return retObj;
@@ -63,16 +63,17 @@ CatchError.prototype.pushError = function(message)
      let errorMsg = this.selectMsg(message);
      let errorObj = {
           'clientInfo': this.helper.getClientInfo(),
-          'logged_date': this.helper.getDateTime(),
+          'loggedDate': this.helper.getDateTime(),
           'location': location.pathname,
           'message': errorMsg.whatMsg || errorMsg.lineMsg || '',
-          'line': errorMsg.lineMsg || ''
+          'line': errorMsg.lineMsg || '',
+          'readyState' : document.readyState
      }
      console.log(errorObj);
      //console.log(JSON.stringify(errorObj));
-     let logUrl = 'http://localhost:8080/log';
+     let logUrl = 'http://localhost:8080/errorLog';
 
-     postRequest(logUrl, errorObj);
+     //postRequest(logUrl, errorObj);
      return errorObj;
 }
 
@@ -80,10 +81,11 @@ CatchError.prototype.pushErrorAjax = function (message, loc)
 {
      let errorObj = {
           'clientInfo': this.helper.getClientInfo(),
-          'logged_date': this.helper.getDateTime(),
+          'loggedDate': this.helper.getDateTime(),
           'location': location.pathname,
           'message': message.statusText || 'NULL',
-          'type': 'ajax'
+          'type': 'ajax',
+          'readyState' : document.readyState
      }
      console.log(errorObj);
      
@@ -128,6 +130,9 @@ window.addEventListener('error', function(error){
      // script error. -> https://sentry.io/answers/javascript-script-error/
      Catcher.pushError(error);
 },true);
+
+
+window.addEventListener()
 
 
 
