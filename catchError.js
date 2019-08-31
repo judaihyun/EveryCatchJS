@@ -64,7 +64,7 @@ CatchError.prototype.pushError = function(message)
      let errorObj = {
           'clientInfo': this.helper.getClientInfo(),
           'loggedDate': this.helper.getDateTime(),
-          'location': location.pathname,
+          'location': decodeURIComponent(location.pathname),
           'message': errorMsg.whatMsg || errorMsg.lineMsg || '',
           'line': errorMsg.lineMsg || '',
           'readyState' : document.readyState
@@ -73,7 +73,7 @@ CatchError.prototype.pushError = function(message)
      //console.log(JSON.stringify(errorObj));
      let logUrl = 'http://localhost:8080/errorLog';
 
-     //postRequest(logUrl, errorObj);
+     postRequest(logUrl, errorObj);
      return errorObj;
 }
 
@@ -99,6 +99,7 @@ CatchError.prototype.pushErrorAjax = function (message, loc)
 
 function postRequest(url, data)
 {
+     /*
 	$.ajax({
 		type: "post",
 		url: url,
@@ -107,7 +108,20 @@ function postRequest(url, data)
 		error: function (jqXHR) {
 			console.log(jqXHR);
 		}
-	});
+     });
+     */
+    let header = new Headers();
+    header.append('Content-type','application/json');
+    header.append('Accept','application/json');
+    let init = {
+     method:'POST',
+     headers: header,
+     body: JSON.stringify(data)
+    };
+
+    fetch(url, init).then(function(res){
+         console.log(res);
+    })
 
 }
 
@@ -116,23 +130,12 @@ function postRequest(url, data)
 var Catcher = Catcher || new CatchError();
 
 
-/*
-
-window.onerror = function (what, where, line, error) {
-//     catchError.pushError(what, where, line);
-};
-
-*/
-
-
-
 window.addEventListener('error', function(error){
      // script error. -> https://sentry.io/answers/javascript-script-error/
      Catcher.pushError(error);
 },true);
 
 
-window.addEventListener()
 
 
 
